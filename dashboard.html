@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Data Operations Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+      background-color: white;
+      color: black;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    #banner {
+      height: 60px;
+      background-color: black;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    #banner h1 {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      margin: 0;
+    }
+
+    #navbar {
+      background-color: #f1f1f1;
+      padding: 10px;
+    }
+
+    #navbar a {
+      text-decoration: none;
+      padding: 8px 16px;
+      margin-right: 10px;
+      color: black;
+    }
+
+    #navbar a:hover {
+      background-color: #ddd;
+    }
+
+    #navbar a.selected {
+      background-color: #ddd;
+    }
+
+    #mode-buttons {
+      text-align: left;
+      margin-top: 10px;
+      padding-left: 20px;
+    }
+
+    #mode-buttons button {
+        padding: 5px;
+    }
+
+    #batch-inputs {
+      text-align: left;
+      margin-top: 10px;
+    }
+
+    #batch-inputs label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    #batch-inputs input {
+      width: 200px;
+      padding: 5px;
+    }
+
+    .visualisations {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    img {
+      width: 85%;
+      height: auto;
+      margin-top: 10px;
+    }
+
+    img.pie {
+      margin-top: 0px;
+      width: 21%;
+      height: auto;
+    }
+
+    .section {
+      margin-top: 25px;
+      margin-left: 20px;
+    }
+
+    table {
+      border-collapse: collapse;
+      border: 1px solid #000;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    th, td {
+      text-align: left;
+      border: 1px solid #000;
+      padding: 8px;
+      font-weight: normal;
+    }
+
+    th {
+      padding: 10px
+    }
+
+    tr:first-child th {
+      border-left: none;  /* Remove left border for the first th */
+      border-right: none; /* Remove right border for the last th */
+    }
+
+    tr:nth-child(2) th {
+      font-weight: bold;
+      text-align: center;
+    }
+
+    th:nth-child(8), td:nth-child(8), th:nth-child(17), td:nth-of-type(17) {
+      border-left: 3px solid #000
+    }
+
+    tr:nth-child(even) {
+      background-color: rgb(235, 235, 235);
+    }
+
+
+    .table {
+      margin-top: 10px;
+      margin-right: 10px;
+    }
+    
+    .key-stats {
+      font-size: 16px;
+      margin-top: 10px;
+      margin-left: 20px;
+      margin-bottom: 20px;
+    }
+
+    .key-stats li {
+      margin-top: 5px;
+    }
+
+    h4 {
+      margin-bottom: 5px;
+    }
+
+    .green {
+      background: rgb(0, 222, 0)
+    }
+
+    .yellow {
+      background: yellow
+    }
+
+    .grey {
+      background: rgb(163, 163, 251);
+    }
+  </style>
+</head>
+<body>
+  <div id="banner">
+    <h1>Data Operations Dashboard</h1>
+  </div>
+  
+  <div id="navbar">
+    <a href="#summary" class="selected">Summary</a>
+    <a href="#batch-composition">Batch Composition</a>
+    <a href="#failure-rates">Success Rates</a>
+    <a href="#processing-times">Processing Times</a>
+    <a href="#processing-times">Ongoing Batch Process</a>
+  </div>
+
+  <div class="section">
+  <div class="table">
+      <h3>Ongoing Batches</h3>
+      <table>  
+        <tr>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th><b>Capture Operations</b></th>
+          <th></th>
+          <th></th>
+          <th></th>
+
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th><b>Ingestion</b></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+
+          <th></th>
+          <th></th>
+          <th><b>Annotation</b></th>
+          <th></th>
+          <th></th>
+
+        </tr>
+        <tr> 
+          <th>Batch</th>
+          <th>Status</th>
+          <th>Planned Captures</th>
+          <th>Recorded</th>
+          <th>Underway</th>
+          <th>Scrapped</th>
+          <th>Completion</th>
+          <th>Ingesting</th>
+          <th>Checking</th>
+          <th>Converting</th>
+          <th>DFC</th>
+          <th>MTC</th>
+          <th>Compressing</th>
+          <th>Processing</th>
+          <th>Uploaded</th>
+          <th>Completion</th>
+          <th>To Annotate</th>
+          <th>Not Annotated</th>
+          <th>Annotated</th>
+          <th>Supplier</th>
+          <th>Completion</th>
+        </tr>
+        <tr>
+          <td>1.1</td>
+          <td class="green">Complete</td>
+          <td>500</td>
+          <td class="green">437</td>
+          <td>0</td>
+          <td>63</td>
+          <td>3/12/2022</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td class="green">396</td>
+          <td>17/12/2022</td>
+          <td>396</td>
+          <td>26</td>
+          <td class="green">370</td>
+          <td>Valeo TC</td>
+          <td>31/12/2022</td>
+        </tr>
+        <tr>
+          <td>1.2</td>
+          <td class="green">Complete</td>
+          <td>500</td>
+          <td class="green">437</td>
+          <td>0</td>
+          <td>63</td>
+          <td>3/12/2022</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td class="green">396</td>
+          <td>17/12/2022</td>
+          <td>396</td>
+          <td>26</td>
+          <td class="green">370</td>
+          <td>Valeo TC</td>
+          <td>31/12/2022</td>
+        </tr>
+        <tr>
+          <td>1.3</td>
+          <td class="green">Complete</td>
+          <td>600</td>
+          <td class="green">437</td>
+          <td>0</td>
+          <td>63</td>
+          <td>3/12/2022</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td class="green">396</td>
+          <td>17/12/2022</td>
+          <td>396</td>
+          <td>26</td>
+          <td class="green">370</td>
+          <td>Valeo TC</td>
+          <td>31/12/2022</td>
+        </tr>
+        <tr>
+          <td>1.4</td>
+          <td class="green">Complete</td>
+          <td>600</td>
+          <td class="green">437</td>
+          <td>0</td>
+          <td>63</td>
+          <td>3/12/2022</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td class="green">396</td>
+          <td>17/12/2022</td>
+          <td>396</td>
+          <td>26</td>
+          <td class="green">370</td>
+          <td>Valeo TC</td>
+          <td>31/12/2022</td>
+        </tr>
+        <tr>
+          <td>1.5</td>
+          <td class="green">Complete</td>
+          <td>600</td>
+          <td class="green">437</td>
+          <td>0</td>
+          <td>63</td>
+          <td>3/12/2022</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td class="green">396</td>
+          <td>17/12/2022</td>
+          <td>396</td>
+          <td>26</td>
+          <td class="green">370</td>
+          <td>Valeo TC</td>
+          <td>31/12/2022</td>
+        </tr>
+        <tr>
+          <td>2.1</td>
+          <td class="yellow">Underway</td>
+          <td>500</td>
+          <td class="green">437</td>
+          <td>0</td>
+          <td>63</td>
+          <td>3/12/2022</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td class="green">396</td>
+          <td>17/12/2022</td>
+          <td>396</td>
+          <td>26</td>
+          <td class="yellow">296</td>
+          <td>Valeo TC</td>
+          <td>31/12/2022</td>
+        </tr>
+        <tr>
+          <td>2.2</td>
+          <td class="yellow">Underway</td>
+          <td>500</td>
+          <td class="green">437</td>
+          <td>0</td>
+          <td>63</td>
+          <td>3/12/2022</td>
+          <td>0</td>
+          <td class="yellow">13</td>
+          <td class="yellow">128</td>
+          <td class="yellow">234</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>17/12/2022</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>Scale AI</td>
+          <td>31/12/2022</td>
+        </tr>
+        <tr>
+          <td>2.3</td>
+          <td class="yellow">Underway</td>
+          <td>600</td>
+          <td class="yellow">289</td>
+          <td>0</td>
+          <td>23</td>
+          <td>3/12/2022</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>17/12/2022</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>Scale AI</td>
+          <td>31/12/2022</td>
+        </tr>
+        <tr>
+          <td>2.4</td>
+          <td class="grey">Planned</td>
+          <td>600</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>3/12/2022</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>17/12/2022</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>Valeo TC</td>
+          <td>31/12/2022</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!--<div class="section">
+    <h3>Batch Range:</h3>
+    <div id="batch-inputs">
+      <input type="text" id="batch-input-1">
+      to
+      <input type="text" id="batch-input-2">
+    </div>
+  </div>-->
+
+  <div id="at-a-glance" class="section">
+    <h3>Recent Batch Summary:</h3>
+    <div class="key-stats">
+      <ul>
+        <li><b>Planned Captures in Range:</b> 10762</li>
+        <li><b>Recorded Captures in Range:</b> 8943</li>
+        <li><b>Ingested Captures in Range:</b> 6476</li>
+        <li><b>Total Capture Loss:</b> 4286 (39%)</li>
+        <li><b>Time Spent in Ingest:</b> 176 hours</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="batch-composition" class="section">
+    <h3>Recent Batch Content (Pre-Ingest):</h3>
+    <div class="visualisations">
+      <img class="pie" src="pie1.png">
+      <img class="pie" src="pie2.png">
+      <img class="pie" src="pie3.png">
+      <img class="pie" src="pie4.png">
+      <img class="pie" src="pie5.png">
+      </div>
+    </div>
+  </div>
+
+  <div id="batch-composition" class="section">
+    <h3>Recent Batch Content (Post-Ingest):</h3>
+    <div class="visualisations">
+      <img class="pie" src="pie1.png">
+      <img class="pie" src="pie2.png">
+      <img class="pie" src="pie3.png">
+      <img class="pie" src="pie4.png">
+      <img class="pie" src="pie5.png">
+      </div>
+    </div>
+  </div>
+
+  <div id="success-rates" class="section">
+    <h3>Capture Loss:</h3>
+    <div class="visualisations">
+      <img src="sankey.png">
+    </div>
+  </div>
+
+  <div id="processing-times" class="section">
+    <h3>Capture Processing Times:</h3>
+    <div class="visualisations">
+      <img src="bar.png">
+      <img src="stacked-bar.png">
+    </div>
+  </div>
+
+  <div id="ongoing-batch-process" class="section">
+    <h3>Average Batch Processing Timeline:</h3>
+    <img src="gnatt.png">
+  </div>
+  </div>
+
+
+
+
+</body>
+</html>
