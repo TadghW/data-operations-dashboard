@@ -17,6 +17,7 @@
       font-family: 'Montserrat', sans-serif;
     }
 
+
     #banner {
       height: 60px;
       background-color: black;
@@ -42,6 +43,10 @@
       padding: 8px 16px;
       margin-right: 10px;
       color: black;
+    }
+
+    td a {
+      text-decoration: underline;
     }
 
     #navbar a:hover {
@@ -158,6 +163,14 @@
       margin-bottom: 5px;
     }
 
+    .square {
+      min-height: 20px;
+      min-width: 20px;
+      display: inline-block;
+      margin: 5px;
+      outline: 1px solid #000;
+    }
+
     .green {
       background: rgb(0, 222, 0)
     }
@@ -168,6 +181,25 @@
 
     .grey {
       background: rgb(163, 163, 251);
+    }
+
+    .amber {
+      background: #FFBF00;
+    }
+
+    .red {
+      background: red;
+    }
+
+    .aqm {
+      background: rgb(136, 255, 136);
+    }
+
+    .legend > *{
+      vertical-align: middle;
+    }
+    .legend {
+      padding: 10px;
     }
   </style>
 </head>
@@ -217,35 +249,39 @@
           <th>Planned</th>
           <th>Received</th>
           <th>Uploaded</th>
-          <th>Handover</th> <!--date-->
-          <th>Ingested</th>
-          <th>Processed</th>
-          <th>Uploaded</th>
+          <th>Completion</th> <!--date-->
+          <th>MDF Checker</th>
+          <th>Conversion</th>
+          <th>DFC</th>
+          <th>Preparation</th>
           <th>Verified</th> 
-          <th>Handover</th> <!--date-->
+          <th>Completion</th> <!--date-->
           <th>Planned</th>
           <th>Annotated</th>
           <th>Verified</th>
           <th>Uploaded</th> <!--date-->
           <th>Supplier</th>
+          <th>Ticket</th>
         </tr>
         <tr>
           <td class="green">VSLAM_2.1_BULK</td>
           <td class="green">3/12/2022</td>
-          <td class="green">200</td>
-          <td class="green">437</td>
-          <td class="green">437</td>
+          <td class="green">1000</td>
+          <td class="green">981</td>
+          <td class="amber">790</td>
           <td class="green">16/12/2022</td>
-          <td class="green">437</td>
-          <td class="green">437</td>
-          <td class="green">437</td>
-          <td class="green">419</td>
+          <td class="green">780</td>
+          <td class="yellow">752</td>
+          <td class="yellow">748</td>
+          <td class="green">747</td>
+          <td class="green">740</td>
           <td class="green">19/12/2022</td>
-          <td class="green">419</td>
-          <td class="green">419</td>
-          <td class="green">419</td>
+          <td class="amber">683</td>
+          <td class="green">683</td>
+          <td class="green">683</td>
           <td class="green">31/12/2022</td>
           <td class="green">Valeo Annotation</td>
+          <td class="green"><a>Ticket</a></td>
         </tr>
         <tr>
           <td class="green">VSLAM_2.1_RAINY</td>
@@ -258,12 +294,14 @@
           <td class="green">437</td>
           <td class="green">437</td>
           <td class="green">419</td>
+          <td class="green">419</td>
           <td class="green">19/12/2022</td>
           <td class="green">419</td>
           <td class="green">419</td>
           <td class="green">419</td>
           <td class="green">31/12/2022</td>
           <td class="green">Valeo Annotation</td>
+          <td class="green"><a>Ticket</a></td>
         </tr>
         <tr>
           <td class="green">VSLAM_2.1_DRY_OVERCAST</td>
@@ -276,12 +314,14 @@
           <td class="green">437</td>
           <td class="green">437</td>
           <td class="green">419</td>
+          <td class="green">419</td>
           <td class="green">19/12/2022</td>
           <td class="green">419</td>
-          <td class="yellow">390</td>
-          <td class="yellow">2</td>
+          <td class="aqm">390</td>
+          <td class="aqm">2</td>
           <td></td>
           <td>Valeo Annotation</td>
+          <td class="green"><a>Ticket</a></td>
         </tr>
         <tr>
           <td class="green">VSLAM_2.1_DRY_CLOUDY</td>
@@ -291,8 +331,9 @@
           <td class="green">437</td>
           <td class="green">16/12/2022</td>
           <td class="green">437</td>
-          <td class="yellow">273</td>
-          <td class="yellow">132</td>
+          <td class="aqm">273</td>
+          <td class="aqm">132</td>
+          <td></td>
           <td></td>
           <td></td>
           <td></td>
@@ -300,13 +341,15 @@
           <td></td>
           <td></td>
           <td>Valeo Annotation</td>
+          <td class="green"><a>Ticket</a></td>
         </tr>
         <tr>
           <td class="green">VSLAM_2.1_DRY_CLEAR</td>
           <td class="green">3/12/2022</td>
           <td class="green">400</td>
-          <td class="yellow">264</td>
-          <td class="yellow">120</td>
+          <td class="aqm">264</td>
+          <td class="aqm">120</td>
+          <td></td>
           <td></td>
           <td></td>
           <td></td>
@@ -318,6 +361,7 @@
           <td></td>
           <td></td>
           <td>Valeo Annotation</td>
+          <td class="green"><a>Ticket</a></td>
         </tr>
         <tr>
           <td class="green">VSLAM_2.2_BULK</td>
@@ -335,9 +379,12 @@
           <td></td>
           <td></td>
           <td></td>
+          <td></td>
           <td>Valeo Annotation</td>
+          <td class="green"><a>Ticket</a></td>
         </tr>
       </table>
+      <div class="legend">Legend: <div class="square green"></div>= Complete | <div class="square aqm"></div>= Underway | <div class="square yellow"></div>= Completed with &lt;98% success |  <div class="square amber"></div>= Completed with &lt;90% success  | <div class="square red"></div>= Completed with &lt;80% success  </div>
     </div>
   </div>
 
