@@ -135,8 +135,12 @@
       text-align: center;
     }
 
+    tr:first-child th:nth-child(3), tr:first-child th:nth-child(7), tr:first-child th:nth-child(12), tr:first-child th:nth-child(18) {
+      border-left: 1px solid #000;
+    }
+
     th:nth-child(3), td:nth-child(3), td:nth-child(7), th:nth-child(7), th:nth-child(12), td:nth-of-type(12) {
-      border-left: 3px solid #000
+      border-left: 1px solid #000
     }
 
     tr:nth-child(even) {
@@ -169,6 +173,7 @@
       display: inline-block;
       margin: 5px;
       outline: 1px solid #000;
+      margin-left: 10px;
     }
 
     .green {
@@ -241,6 +246,10 @@
           <th></th>
           <th></th>
           <th></th>
+          <th></th>
+          
+          <th><b>Info</b></th>
+
 
         </tr>
         <tr> 
@@ -384,7 +393,7 @@
           <td class="green"><a>Ticket</a></td>
         </tr>
       </table>
-      <div class="legend">Legend: <div class="square green"></div>= Complete | <div class="square aqm"></div>= Underway | <div class="square yellow"></div>= Completed with &lt;98% success |  <div class="square amber"></div>= Completed with &lt;90% success  | <div class="square red"></div>= Completed with &lt;80% success  </div>
+      <div class="legend"><div class="square green"></div>= Complete <div class="square aqm"></div>= Underway <div class="square yellow"></div>= &lt;2% failure rate  <div class="square amber"></div>= &lt;10% failure rate <div class="square red"></div>= &gt;10% failure rate  </div>
     </div>
   </div>
 
