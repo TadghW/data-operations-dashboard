@@ -112,6 +112,7 @@
       border: 1px solid #000;
       font-size: 12px;
       margin-top: 10px;
+      margin-right: 40px;
     }
 
     th, td {
@@ -135,11 +136,15 @@
       text-align: center;
     }
 
-    tr:first-child th:nth-child(3), tr:first-child th:nth-child(7), tr:first-child th:nth-child(12), tr:first-child th:nth-child(18) {
+    tr:first-child th:nth-child(4), tr:first-child th:nth-child(8), tr:first-child th:nth-child(13) {
+      border-left: 0px solid #000;
+    }
+
+    tr:first-child th:nth-child(17) {
       border-left: 1px solid #000;
     }
 
-    th:nth-child(3), td:nth-child(3), td:nth-child(7), th:nth-child(7), th:nth-child(12), td:nth-of-type(12) {
+    th:nth-child(4), td:nth-child(4), td:nth-child(8), th:nth-child(8), th:nth-child(13), td:nth-of-type(13), td:nth-of-type(17) {
       border-left: 1px solid #000
     }
 
@@ -147,10 +152,13 @@
       background-color: rgb(235, 235, 235);
     }
 
-
     .table {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
       margin-top: 10px;
       margin-right: 10px;
+      margin-bottom: 30px;
     }
     
     .key-stats {
@@ -196,6 +204,10 @@
       background: red;
     }
 
+    .blue {
+      background: rgb(182, 182, 252);
+    }
+
     .aqm {
       background: rgb(136, 255, 136);
     }
@@ -206,7 +218,56 @@
     .legend {
       padding: 10px;
     }
-  </style>
+    
+
+    .divide > *{
+      background: rgb(57, 57, 57);
+      color: #fff;
+      max-height: 20px;
+      padding: 3px 0px 3px 5px;
+      border: none !important;
+    }
+
+    .divide > th:last-child {
+      border-right: 1px solid #000;
+    }
+
+    .input-group {
+      display: inline-block;
+      margin-right: 15px;
+    }
+
+    #dashboard-param {
+      display: flex;
+      flex-direction: column;
+      background-color: rgb(235, 235, 235);
+      width: 80vw;
+      border: 1px solid rgb(164, 164, 164);
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .inputs {
+      padding: 7px 0px 5px 10px;
+    }
+    
+    .inputs:last-of-type {
+      padding-bottom: 15px;
+    }
+
+    h3 {
+      margin-bottom: -10px;
+    }
+
+    h4 {
+      padding: 10px 0px 0px 10px;
+    }
+
+    span.green, span.aqm, span.yellow, span.amber, span.red {
+      font-size: 10px;
+    }
+    
+    </style>
 </head>
 <body>
   <div id="banner">
@@ -214,7 +275,7 @@
   </div>
   
   <div id="navbar">
-    <a href="#summary" class="selected">Summary</a>
+    <a href="#overview" class="selected">Overview</a>
     <a href="#batch-composition">Batch Composition</a>
     <a href="#failure-rates">Success Rates</a>
     <a href="#processing-times">Processing Times</a>
@@ -222,233 +283,1112 @@
   </div>
 
   <div class="section">
+    <div id="dashboard-param">
+      <h4>Configure View</h4>
+      <div class="inputs">
+        <div class="input-group">
+          <label for="order-by">Ordered By:</label>
+          <select id="order-by">
+            <option value="most-recent" selected>Most Recent</option>
+            <option value="highest-throughput">Highest Throughput</option>
+            <option value="highest-failure">Highest Failure</option>
+            <option value="annotation-supplier">Annotation Supplier</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="group-by">Grouped By:</label>
+          <select id="group-by">
+            <option value="algorithm" selected>Algorithm</option>
+            <option value="function">Function</option>
+            <option value="ungrouped">Ungrouped</option>
+          </select>
+        </div>
+
+      </div>
+      <div class="inputs">
+        <div class="input-group">
+          <label for="search">Search For:</label>
+          <input type="text" id="search" name="search">
+        </div>
+
+        <div class="input-group">
+          <span>Show:</span>
+          <label for="checkbox-slam">
+            <input type="checkbox" id="checkbox-slam" name="checkbox-slam" checked>
+            VSLAM
+          </label>
+
+          <label for="checkbox-parking">
+            <input type="checkbox" id="checkbox-parking" name="checkbox-parking" checked>
+            NFORM
+          </label>
+        
+          <label for="checkbox-evd">
+            <input type="checkbox" id="checkbox-evd" name="checkbox-evd" checked>
+            APN
+          </label>
+          
+          <label for="checkbox-soiling">
+            <input type="checkbox" id="checkbox-soiling" name="checkbox-soiling" checked>
+            VPP
+          </label>
+        </div>
+      </div>
+      
+      <div class="inputs">
+        <div class="input-group">
+          <label for="max-playlists">Show First:</label>
+          <input type="number" id="max-playlists" name="max-playlists" min="3" max="25" value="6">
+        </div>
+        
+        <div class="input-group">
+          <label for="from-date">Plans Submitted From:</label>
+          <input type="date" id="from-date" name="from-date" value="2022-07-03">
+          
+          <label for="to-date">To:</label>
+          <input type="date" id="to-date" name="to-date" value="2023-07-03">
+        </div>
+
+        <div class="input-group">   
+          <button type="submit">Configure</button>
+          <button type="submit">Reset</button>
+        </div>
+      </div>
+    </div> 
+
+  
+<h3>VSLAM</h3>
   <div class="table">
-      <h3>2023 At a Glance</h3>
-      <table>  
-        <tr>
+    <table>
+      <tr>
+        <th><b>Planning</b></th>
+        <th></th>
+        <th></th>
+      </tr>
+      <tr>
+        <th>Playlist</th>
+        <th>Submitted</th>
+        <th>To Capture</th>
+        <th>To Process</th>
+      </tr>
+      <tr>
+        <td class="green">VPP_0.8_BULK_1</td>
+        <td class="green">3/12/2022</td>
+        <td class="green">1000</td>
+        <td class="green">1000</td>
+      </tr>
+      <tr>
+        <td class="green">IPNext_03/07_Subsample</td>
+        <td class="green">3/12/2022</td>
+        <td class="green"> --- </td>
+        <td class="green"> 200 </td>
+       </tr>
+      <tr>
+        <td class="green">Stellaris_24/06_Subsample</td>
+        <td class="green">3/01/2023</td>
+        <td class="green">100</td>
+        <td class="green">300</td>
+      </tr>
+      <tr>
+        <td class="green">VPP_0.8_BULK_2</td>
+        <td class="green">3/12/2022</td>
+        <td class="green">1200</td>
+        <td class="green">1200</td>
+      </tr>
+      <tr>
+        <td class="green">Misc_Subsample_01/04</td>
+        <td class="green">3/12/2022</td>
+        <td class="green">100</td>
+        <td class="green">300</td>
+      </tr>
+      <tr>
+        <td class="green">Misc_Subsample_01/04</td>
+        <td class="green">3/12/2022</td>
+        <td class="green">0</td>
+        <td class="green">400</td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <th><b>Capture</b></th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+      <tr>
+        <th>Captured</th>
+        <th>Received</th>
+        <th>Uploaded</th>
+        <th>Elapsed</th>
+      </tr>
+      <tr>
+        <td class="green">1000</td>
+        <td class="green">981 <span class="green">(1.9%)</span></td>
+        <td class="green">790 <span class="amber">(9.1%)</span></td>
+        <td class="blue">34 days</td>
+      </tr>
+      <tr>
+        <td class="green"> --- </td>
+        <td class="green"> --- </td>
+        <td class="green"> --- </td>
+        <td class="blue"> --- </td>
+      </tr>
+      <tr>
+        <td class="green">100</td>
+        <td class="green">98 <span class="green">(2%)</td>
+        <td class="green">97 <span class="green">(1%)</span></td>
+        <td class="blue">5 days</td>
+      </tr>
+      <tr>
+        <td class="green"> 1157 <span class="yellow">(3.6%)</span></td>
+        <td class="green"> 1098 <span class="yellow">(4.2%)</span></td>
+        <td class="green"> 1096 <span class="green">(0.6%)</span></td>
+        <td class="blue"> 40 days </td>
+      </tr>
+      <tr>
+        <td class="aqm"> 98 </td>
+        <td class="aqm"> 78 </td>
+        <td> </td>
+        <td class="blue"> 6 days </td>
+      </tr>
+      <tr>
+        <td>0</td>
+        <td></td>
+        <td></td>
+        <td class="blue"> --- </td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <th><b>Processing</b></th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+      <tr>
+        <th>In Queue</th>
+        <th>In Workflow</th>
+        <th>Processed</th>
+        <th>Elapsed</th>
+      </tr>
+      <tr>
+        <td class="green">790</td>
+        <td class="green">790</td>
+        <td class="green">774</td>
+        <td class="blue">14 days</td>
+      </tr>
+      <tr>
+        <td class="green">200</td>
+        <td class="green">200</td>
+        <td class="green">197 <span class="green">(1.5%)</span></td>
+        <td class="blue">3 days</td>
+      </tr>
+      <tr>
+        <td class="green">790</td>
+        <td class="green">790</td>
+        <td class="green">774</td>
+        <td class="blue">14 days</td>
+      </tr>
+      <tr>
+        <td class="green">1096</td>
+        <td class="aqm">473</td>
+        <td class="aqm">241</td>
+        <td class="blue"> 8 days </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="blue"> --- </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="blue"> --- </td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <th><b>Annotation</b></th>
+        <th></th>
+      </tr>
+      <tr>
+        <th>Annotated</th>
+        <th>Elapsed</th>
+      </tr>
+      <tr>
+        <td class="green">683 <span class="amber">(5.7%)</span></td>
+        <td class="blue">42 days</td>
+      </tr>
+      <tr>
+        <td class="green">196 (1%)</td>
+        <td class="blue">12 days</td>
+      </tr>
+      <tr>
+        <td class="green">293<span class="green">(1%)</span></td>
+        <td class="blue">14 days</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="blue"> --- </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="blue"> --- </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="blue"> --- </td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <th><b>Info</b></th>
+        <th></th>
+        <th></th>
+      </tr>
+      <tr>
+        <th>Completed</th>
+        <th>Annotator</th>
+        <th>Elapsed</th>
+        <th>Loss Rate</th>
+        <th>Ticket</th>
+      </tr>
+      <tr>
+        <td class="green">24/02/2023</td>
+        <td class="green">Valeo Annotation</td>
+        <td class="blue">83 days</td>
+        <td class="red">14.8%</td>
+        <td class="green"><a>Ticket</a></td>
+      </tr>
+      <tr>
+        <td class="green">10/03/2023</td>
+        <td class="green">Valeo Annotation</td>
+        <td class="blue">15 days</td>
+        <td class="yellow">2.5%</td>
+        <td class="green"><a>Ticket</a></td>
+      </tr>
+      <tr>
+        <td class="green">01/03/2023</td>
+        <td class="green">Valeo Annotation</td>
+        <td class="blue">29 days</td>
+        <td class="yellow">4%</td>
+        <td class="green"><a>Ticket</a></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="aqm">Valeo Annotation</td>
+        <td class="blue"> 48 days </td> 
+        <td class="amber"> 7.8% </td>
+        <td class="green"><a>Ticket</a></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="aqm">Valeo Annotation</td>
+        <td class="blue"> 6 days </td> 
+        <td class="aqm"> 0% </td>
+        <td class="aqm"><a>Ticket</a></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="aqm">Valeo Annotation</td>
+        <td class="blue"> --- </td> 
+        <td class="aqm"> 0% </td>
+        <td class="aqm"><a>Ticket</a></td>
+      </tr>
+    </table>
+  </div>
 
-          <th><b>Playlist</b></th>
-          <th></th>
-          
-          <th><b>Capture Operations</b></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          
-          <th><b>Data Processing</b></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
+<h3>NFORM</h3>
+<div class="table">
+  <table>
+    <tr>
+      <th><b>Planning</b></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>Playlist</th>
+      <th>Submitted</th>
+      <th>To Capture</th>
+      <th>To Process</th>
+    </tr>
+    <tr>
+      <td class="green">NFORM_2.1_BULK_1</td>
+      <td class="green">3/12/2022</td>
+      <td class="green">1000</td>
+      <td class="green">1000</td>
+    </tr>
+    <tr>
+      <td class="green">IPNext_03/07_Subsample</td>
+      <td class="green">3/12/2022</td>
+      <td class="green"> --- </td>
+      <td class="green"> 200 </td>
+     </tr>
+    <tr>
+      <td class="green">Stellaris_24/06_Subsample</td>
+      <td class="green">3/01/2023</td>
+      <td class="green">100</td>
+      <td class="green">300</td>
+    </tr>
+    <tr>
+      <td class="green">NFORM_2.1_BULK_2</td>
+      <td class="green">3/12/2022</td>
+      <td class="green">1200</td>
+      <td class="green">1200</td>
+    </tr>
+    <tr>
+      <td class="green">Misc_Subsample_01/04</td>
+      <td class="green">3/12/2022</td>
+      <td class="green">100</td>
+      <td class="green">300</td>
+    </tr>
+    <tr>
+      <td class="green">Misc_Subsample_01/04</td>
+      <td class="green">3/12/2022</td>
+      <td class="green">0</td>
+      <td class="green">400</td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <th><b>Capture</b></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>Captured</th>
+      <th>Received</th>
+      <th>Uploaded</th>
+      <th>Elapsed</th>
+    </tr>
+    <tr>
+      <td class="green">1000</td>
+      <td class="green">981 <span class="green">(1.9%)</span></td>
+      <td class="green">790 <span class="amber">(9.1%)</span></td>
+      <td class="blue">34 days</td>
+    </tr>
+    <tr>
+      <td class="green"> --- </td>
+      <td class="green"> --- </td>
+      <td class="green"> --- </td>
+      <td class="blue"> --- </td>
+    </tr>
+    <tr>
+      <td class="green">100</td>
+      <td class="green">98 <span class="green">(2%)</td>
+      <td class="green">97 <span class="green">(1%)</span></td>
+      <td class="blue">5 days</td>
+    </tr>
+    <tr>
+      <td class="green"> 1157 <span class="yellow">(3.6%)</span></td>
+      <td class="green"> 1098 <span class="yellow">(4.2%)</span></td>
+      <td class="green"> 1096 <span class="green">(0.6%)</span></td>
+      <td class="blue"> 40 days </td>
+    </tr>
+    <tr>
+      <td class="aqm"> 98 </td>
+      <td class="aqm"> 78 </td>
+      <td> </td>
+      <td class="blue"> 6 days </td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <th><b>Processing</b></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>In Queue</th>
+      <th>In Workflow</th>
+      <th>Processed</th>
+      <th>Elapsed</th>
+    </tr>
+    <tr>
+      <td class="green">790</td>
+      <td class="green">790</td>
+      <td class="green">774</td>
+      <td class="blue">14 days</td>
+    </tr>
+    <tr>
+      <td class="green">200</td>
+      <td class="green">200</td>
+      <td class="green">197 <span class="green">(1.5%)</span></td>
+      <td class="blue">3 days</td>
+    </tr>
+    <tr>
+      <td class="green">790</td>
+      <td class="green">790</td>
+      <td class="green">774</td>
+      <td class="blue">14 days</td>
+    </tr>
+    <tr>
+      <td class="green">1096</td>
+      <td class="aqm">473</td>
+      <td class="aqm">241</td>
+      <td class="blue"> 8 days </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <th><b>Annotation</b></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>Annotated</th>
+      <th>Elapsed</th>
+    </tr>
+    <tr>
+      <td class="green">683 <span class="amber">(5.7%)</span></td>
+      <td class="blue">42 days</td>
+    </tr>
+    <tr>
+      <td class="green">196 (1%)</td>
+      <td class="blue">12 days</td>
+    </tr>
+    <tr>
+      <td class="green">293<span class="green">(1%)</span></td>
+      <td class="blue">14 days</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <th><b>Info</b></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>Completed</th>
+      <th>Annotator</th>
+      <th>Elapsed</th>
+      <th>Loss Rate</th>
+      <th>Ticket</th>
+    </tr>
+    <tr>
+      <td class="green">24/02/2023</td>
+      <td class="green">Valeo Annotation</td>
+      <td class="blue">83 days</td>
+      <td class="red">14.8%</td>
+      <td class="green"><a>Ticket</a></td>
+    </tr>
+    <tr>
+      <td class="green">10/03/2023</td>
+      <td class="green">Valeo Annotation</td>
+      <td class="blue">15 days</td>
+      <td class="yellow">2.5%</td>
+      <td class="green"><a>Ticket</a></td>
+    </tr>
+    <tr>
+      <td class="green">01/03/2023</td>
+      <td class="green">Valeo Annotation</td>
+      <td class="blue">29 days</td>
+      <td class="yellow">4%</td>
+      <td class="green"><a>Ticket</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="aqm">Valeo Annotation</td>
+      <td class="blue"> 48 days </td> 
+      <td class="amber"> 7.8% </td>
+      <td class="green"><a>Ticket</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="aqm">Valeo Annotation</td>
+      <td class="blue"> 6 days </td> 
+      <td class="aqm"> 0% </td>
+      <td class="aqm"><a>Ticket</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="aqm">Valeo Annotation</td>
+      <td class="blue"> --- </td> 
+      <td class="aqm"> 0% </td>
+      <td class="aqm"><a>Ticket</a></td>
+    </tr>
+  </table>
+ 
+</div>
 
-          <th><b>Annotation</b></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          
-          <th><b>Info</b></th>
+<h3>APN</h3>
+<div class="table">
+  <table>
+    <tr>
+      <th><b>Planning</b></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>Playlist</th>
+      <th>Submitted</th>
+      <th>To Capture</th>
+      <th>To Process</th>
+    </tr>
+    <tr>
+      <td class="green">NFORM_2.4_BULK_1</td>
+      <td class="green">3/12/2022</td>
+      <td class="green">1000</td>
+      <td class="green">1000</td>
+    </tr>
+    <tr>
+      <td class="green">IPNext_03/07_Subsample</td>
+      <td class="green">05/07/2022</td>
+      <td class="green"> --- </td>
+      <td class="green"> 200 </td>
+     </tr>
+    <tr>
+      <td class="green">Stellaris_24/06_Subsample</td>
+      <td class="green">3/01/2023</td>
+      <td class="green">100</td>
+      <td class="green">300</td>
+    </tr>
+    <tr>
+      <td class="green">NFORM_2.4_BULK_2</td>
+      <td class="green">3/12/2022</td>
+      <td class="green">1200</td>
+      <td class="green">1200</td>
+    </tr>
+    <tr>
+      <td class="green">Misc_Subsample_01/04</td>
+      <td class="green">3/12/2022</td>
+      <td class="green">100</td>
+      <td class="green">300</td>
+    </tr>
+    <tr>
+      <td class="green">Misc_Subsample_01/04</td>
+      <td class="green">3/12/2022</td>
+      <td class="green">0</td>
+      <td class="green">400</td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <th><b>Capture</b></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>Captured</th>
+      <th>Received</th>
+      <th>Uploaded</th>
+      <th>Elapsed</th>
+    </tr>
+    <tr>
+      <td class="green">1000</td>
+      <td class="green">981 <span class="green">(1.9%)</span></td>
+      <td class="green">790 <span class="amber">(9.1%)</span></td>
+      <td class="blue">34 days</td>
+    </tr>
+    <tr>
+      <td class="green"> --- </td>
+      <td class="green"> --- </td>
+      <td class="green"> --- </td>
+      <td class="blue"> --- </td>
+    </tr>
+    <tr>
+      <td class="green">100</td>
+      <td class="green">98 <span class="green">(2%)</td>
+      <td class="green">97 <span class="green">(1%)</span></td>
+      <td class="blue">5 days</td>
+    </tr>
+    <tr>
+      <td class="green"> 1157 <span class="yellow">(3.6%)</span></td>
+      <td class="green"> 1098 <span class="yellow">(4.2%)</span></td>
+      <td class="green"> 1096 <span class="green">(0.6%)</span></td>
+      <td class="blue"> 40 days </td>
+    </tr>
+    <tr>
+      <td class="aqm"> 98 </td>
+      <td class="aqm"> 78 </td>
+      <td> </td>
+      <td class="blue"> 6 days </td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <th><b>Processing</b></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>In Queue</th>
+      <th>In Workflow</th>
+      <th>Processed</th>
+      <th>Elapsed</th>
+    </tr>
+    <tr>
+      <td class="green">790</td>
+      <td class="green">790</td>
+      <td class="green">774</td>
+      <td class="blue">14 days</td>
+    </tr>
+    <tr>
+      <td class="green">200</td>
+      <td class="green">200</td>
+      <td class="green">197 <span class="green">(1.5%)</span></td>
+      <td class="blue">3 days</td>
+    </tr>
+    <tr>
+      <td class="green">790</td>
+      <td class="green">790</td>
+      <td class="green">774</td>
+      <td class="blue">14 days</td>
+    </tr>
+    <tr>
+      <td class="green">1096</td>
+      <td class="aqm">473</td>
+      <td class="aqm">241</td>
+      <td class="blue"> 8 days </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <th><b>Annotation</b></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>Annotated</th>
+      <th>Elapsed</th>
+    </tr>
+    <tr>
+      <td class="green">683 <span class="amber">(5.7%)</span></td>
+      <td class="blue">42 days</td>
+    </tr>
+    <tr>
+      <td class="green">196 (1%)</td>
+      <td class="blue">12 days</td>
+    </tr>
+    <tr>
+      <td class="green">293<span class="green">(1%)</span></td>
+      <td class="blue">14 days</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <th><b>Info</b></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>Completed</th>
+      <th>Annotator</th>
+      <th>Elapsed</th>
+      <th>Loss Rate</th>
+      <th>Ticket</th>
+    </tr>
+    <tr>
+      <td class="green">24/02/2023</td>
+      <td class="green">Valeo Annotation</td>
+      <td class="blue">83 days</td>
+      <td class="red">14.8%</td>
+      <td class="green"><a>Ticket</a></td>
+    </tr>
+    <tr>
+      <td class="green">10/03/2023</td>
+      <td class="green">Valeo Annotation</td>
+      <td class="blue">15 days</td>
+      <td class="yellow">2.5%</td>
+      <td class="green"><a>Ticket</a></td>
+    </tr>
+    <tr>
+      <td class="green">01/03/2023</td>
+      <td class="green">Valeo Annotation</td>
+      <td class="blue">29 days</td>
+      <td class="yellow">4%</td>
+      <td class="green"><a>Ticket</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="aqm">Valeo Annotation</td>
+      <td class="blue"> 48 days </td> 
+      <td class="amber"> 7.8% </td>
+      <td class="green"><a>Ticket</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="aqm">Valeo Annotation</td>
+      <td class="blue"> 6 days </td> 
+      <td class="aqm"> 0% </td>
+      <td class="aqm"><a>Ticket</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="aqm">Valeo Annotation</td>
+      <td class="blue"> --- </td> 
+      <td class="aqm"> 0% </td>
+      <td class="aqm"><a>Ticket</a></td>
+    </tr>
+  </table>
+ 
+</div>
+
+<h3>VPP</h3>
+<div class="table">
+  <table>
+    <tr>
+      <th><b>Planning</b></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>Playlist</th>
+      <th>Submitted</th>
+      <th>To Capture</th>
+      <th>To Process</th>
+    </tr>
+    <tr>
+      <td class="green">APN_1.4_BULK_1</td>
+      <td class="green">3/12/2022</td>
+      <td class="green">1000</td>
+      <td class="green">1000</td>
+    </tr>
+    <tr>
+      <td class="green">IPNext_03/07_Subsample</td>
+      <td class="green">3/12/2022</td>
+      <td class="green"> --- </td>
+      <td class="green"> 200 </td>
+     </tr>
+    <tr>
+      <td class="green">Stellaris_24/06_Subsample</td>
+      <td class="green">3/01/2023</td>
+      <td class="green">100</td>
+      <td class="green">300</td>
+    </tr>
+    <tr>
+      <td class="green">APN_1.4_BULK_2</td>
+      <td class="green">3/12/2022</td>
+      <td class="green">1200</td>
+      <td class="green">1200</td>
+    </tr>
+    <tr>
+      <td class="green">Misc_Subsample_01/04</td>
+      <td class="green">3/12/2022</td>
+      <td class="green">100</td>
+      <td class="green">300</td>
+    </tr>
+    <tr>
+      <td class="green">Misc_Subsample_01/04</td>
+      <td class="green">3/12/2022</td>
+      <td class="green">0</td>
+      <td class="green">400</td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <th><b>Capture</b></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>Captured</th>
+      <th>Received</th>
+      <th>Uploaded</th>
+      <th>Elapsed</th>
+    </tr>
+    <tr>
+      <td class="green">1000</td>
+      <td class="green">981 <span class="green">(1.9%)</span></td>
+      <td class="green">790 <span class="amber">(9.1%)</span></td>
+      <td class="blue">34 days</td>
+    </tr>
+    <tr>
+      <td class="green"> --- </td>
+      <td class="green"> --- </td>
+      <td class="green"> --- </td>
+      <td class="blue"> --- </td>
+    </tr>
+    <tr>
+      <td class="green">100</td>
+      <td class="green">98 <span class="green">(2%)</td>
+      <td class="green">97 <span class="green">(1%)</span></td>
+      <td class="blue">5 days</td>
+    </tr>
+    <tr>
+      <td class="green"> 1157 <span class="yellow">(3.6%)</span></td>
+      <td class="green"> 1098 <span class="yellow">(4.2%)</span></td>
+      <td class="green"> 1096 <span class="green">(0.6%)</span></td>
+      <td class="blue"> 40 days </td>
+    </tr>
+    <tr>
+      <td class="aqm"> 98 </td>
+      <td class="aqm"> 78 </td>
+      <td> </td>
+      <td class="blue"> 6 days </td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <th><b>Processing</b></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>In Queue</th>
+      <th>In Workflow</th>
+      <th>Processed</th>
+      <th>Elapsed</th>
+    </tr>
+    <tr>
+      <td class="green">790</td>
+      <td class="green">790</td>
+      <td class="green">774</td>
+      <td class="blue">14 days</td>
+    </tr>
+    <tr>
+      <td class="green">200</td>
+      <td class="green">200</td>
+      <td class="green">197 <span class="green">(1.5%)</span></td>
+      <td class="blue">3 days</td>
+    </tr>
+    <tr>
+      <td class="green">790</td>
+      <td class="green">790</td>
+      <td class="green">774</td>
+      <td class="blue">14 days</td>
+    </tr>
+    <tr>
+      <td class="green">1096</td>
+      <td class="aqm">473</td>
+      <td class="aqm">241</td>
+      <td class="blue"> 8 days </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <th><b>Annotation</b></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>Annotated</th>
+      <th>Elapsed</th>
+    </tr>
+    <tr>
+      <td class="green">683 <span class="amber">(5.7%)</span></td>
+      <td class="blue">42 days</td>
+    </tr>
+    <tr>
+      <td class="green">196 (1%)</td>
+      <td class="blue">12 days</td>
+    </tr>
+    <tr>
+      <td class="green">293<span class="green">(1%)</span></td>
+      <td class="blue">14 days</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="blue"> --- </td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <th><b>Info</b></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>Completed</th>
+      <th>Annotator</th>
+      <th>Elapsed</th>
+      <th>Loss Rate</th>
+      <th>Ticket</th>
+    </tr>
+    <tr>
+      <td class="green">24/02/2023</td>
+      <td class="green">Valeo Annotation</td>
+      <td class="blue">83 days</td>
+      <td class="red">14.8%</td>
+      <td class="green"><a>Ticket</a></td>
+    </tr>
+    <tr>
+      <td class="green">10/03/2023</td>
+      <td class="green">Valeo Annotation</td>
+      <td class="blue">15 days</td>
+      <td class="yellow">2.5%</td>
+      <td class="green"><a>Ticket</a></td>
+    </tr>
+    <tr>
+      <td class="green">01/03/2023</td>
+      <td class="green">Valeo Annotation</td>
+      <td class="blue">29 days</td>
+      <td class="yellow">4%</td>
+      <td class="green"><a>Ticket</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="aqm">Valeo Annotation</td>
+      <td class="blue"> 48 days </td> 
+      <td class="amber"> 7.8% </td>
+      <td class="green"><a>Ticket</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="aqm">Valeo Annotation</td>
+      <td class="blue"> 6 days </td> 
+      <td class="aqm"> 0% </td>
+      <td class="aqm"><a>Ticket</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="aqm">Valeo Annotation</td>
+      <td class="blue"> --- </td> 
+      <td class="aqm"> 0% </td>
+      <td class="aqm"><a>Ticket</a></td>
+    </tr>
+  </table>
+ 
+</div>
+</div>
+
+<div id="ongoing-batch-process" class="section">
+  <h3>Rolling Average Projected Batch Timline:</h3>
+  <img src="gantt_chart.png">
+</div>
+
+<div id="success-rates" class="section">
+  <h3>Capture Loss Contributions:</h3>
+  <div class="visualisations">
+    <img src="sankey.png">
+  </div>
+</div>
+
+<div id="ongoing-batches" class="section">
+  <h3>Ongoing Batches - Overview</h3>
+  <div class="visualisations">
+    <img src="areagraph.png">
+    <img src="streamgraph1.png">
+    <img src="streamgraph2.png">
+    <img src="streamgraph3.png">
+  </div>
+</div>
 
 
-        </tr>
-        <tr> 
-          <th>Playlist</th>
-          <th>Plan Submitted</th> <!--date-->
-          <th>Planned</th>
-          <th>Received</th>
-          <th>Uploaded</th>
-          <th>Completion</th> <!--date-->
-          <th>MDF Checker</th>
-          <th>Conversion</th>
-          <th>DFC</th>
-          <th>Preparation</th>
-          <th>Verified</th> 
-          <th>Completion</th> <!--date-->
-          <th>Planned</th>
-          <th>Annotated</th>
-          <th>Verified</th>
-          <th>Uploaded</th> <!--date-->
-          <th>Supplier</th>
-          <th>Ticket</th>
-        </tr>
-        <tr>
-          <td class="green">VSLAM_2.1_BULK</td>
-          <td class="green">3/12/2022</td>
-          <td class="green">1000</td>
-          <td class="green">981</td>
-          <td class="amber">790</td>
-          <td class="green">16/12/2022</td>
-          <td class="green">780</td>
-          <td class="yellow">752</td>
-          <td class="yellow">748</td>
-          <td class="green">747</td>
-          <td class="green">740</td>
-          <td class="green">19/12/2022</td>
-          <td class="amber">683</td>
-          <td class="green">683</td>
-          <td class="green">683</td>
-          <td class="green">31/12/2022</td>
-          <td class="green">Valeo Annotation</td>
-          <td class="green"><a>Ticket</a></td>
-        </tr>
-        <tr>
-          <td class="green">VSLAM_2.1_RAINY</td>
-          <td class="green">3/12/2022</td>
-          <td class="green">200</td>
-          <td class="green">437</td>
-          <td class="green">437</td>
-          <td class="green">16/12/2022</td>
-          <td class="green">437</td>
-          <td class="green">437</td>
-          <td class="green">437</td>
-          <td class="green">419</td>
-          <td class="green">419</td>
-          <td class="green">19/12/2022</td>
-          <td class="green">419</td>
-          <td class="green">419</td>
-          <td class="green">419</td>
-          <td class="green">31/12/2022</td>
-          <td class="green">Valeo Annotation</td>
-          <td class="green"><a>Ticket</a></td>
-        </tr>
-        <tr>
-          <td class="green">VSLAM_2.1_DRY_OVERCAST</td>
-          <td class="green">3/12/2022</td>
-          <td class="green">300</td>
-          <td class="green">437</td>
-          <td class="green">437</td>
-          <td class="green">16/12/2022</td>
-          <td class="green">437</td>
-          <td class="green">437</td>
-          <td class="green">437</td>
-          <td class="green">419</td>
-          <td class="green">419</td>
-          <td class="green">19/12/2022</td>
-          <td class="green">419</td>
-          <td class="aqm">390</td>
-          <td class="aqm">2</td>
-          <td></td>
-          <td>Valeo Annotation</td>
-          <td class="green"><a>Ticket</a></td>
-        </tr>
-        <tr>
-          <td class="green">VSLAM_2.1_DRY_CLOUDY</td>
-          <td class="green">3/12/2022</td>
-          <td class="green">300</td>
-          <td class="green">437</td>
-          <td class="green">437</td>
-          <td class="green">16/12/2022</td>
-          <td class="green">437</td>
-          <td class="aqm">273</td>
-          <td class="aqm">132</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>Valeo Annotation</td>
-          <td class="green"><a>Ticket</a></td>
-        </tr>
-        <tr>
-          <td class="green">VSLAM_2.1_DRY_CLEAR</td>
-          <td class="green">3/12/2022</td>
-          <td class="green">400</td>
-          <td class="aqm">264</td>
-          <td class="aqm">120</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>Valeo Annotation</td>
-          <td class="green"><a>Ticket</a></td>
-        </tr>
-        <tr>
-          <td class="green">VSLAM_2.2_BULK</td>
-          <td class="green">3/12/2022</td>
-          <td class="green">1000</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>Valeo Annotation</td>
-          <td class="green"><a>Ticket</a></td>
-        </tr>
-      </table>
-      <div class="legend"><div class="square green"></div>= Complete <div class="square aqm"></div>= Underway <div class="square yellow"></div>= &lt;2% failure rate  <div class="square amber"></div>= &lt;10% failure rate <div class="square red"></div>= &gt;10% failure rate  </div>
+
+<div id="processing-times" class="section">
+  <h3>Capture Generation Process Blocking Time:</h3>
+  <div class="visualisations">
+    <img src="stacked_bars.png">
+  </div>
+</div>
+
+
+
+<div id="batch-composition" class="section">
+  <h3>Cumulative Capture Content (Pre-Ingest):</h3>
+  <div class="visualisations">
+    <img class="pie" src="pie1.png">
+    <img class="pie" src="pie2.png">
+    <img class="pie" src="pie3.png">
+    <img class="pie" src="pie4.png">
+    <img class="pie" src="pie5.png">
     </div>
   </div>
+</div>
 
-  <div id="ongoing-batches" class="section">
-    <h3>Ongoing Batches - Overview</h3>
-    <div class="visualisations">
-      <img src="areagraph.png">
-      <img src="streamgraph1.png">
-      <img src="streamgraph2.png">
-      <img src="streamgraph3.png">
+<div id="batch-composition" class="section">
+  <h3>Cumulative Capture Content (Post-Annotation):</h3>
+  <div class="visualisations">
+    <img class="pie" src="pie1.png">
+    <img class="pie" src="pie2.png">
+    <img class="pie" src="pie3.png">
+    <img class="pie" src="pie4.png">
+    <img class="pie" src="pie5.png">
     </div>
   </div>
-
-  <div id="ongoing-batch-process" class="section">
-    <h3>Rolling Average Projected Batch Timline:</h3>
-    <img src="gantt_chart.png">
-  </div>
-
-    <div id="processing-times" class="section">
-    <h3>Capture Generation Process Blocking Time:</h3>
-    <div class="visualisations">
-      <img src="stacked_bars.png">
-    </div>
-  </div>
-
-  <div id="success-rates" class="section">
-    <h3>Capture Loss Contributions:</h3>
-    <div class="visualisations">
-      <img src="sankey.png">
-    </div>
-  </div>
-
-  <div id="batch-composition" class="section">
-    <h3>Cumulative Capture Content (Pre-Ingest):</h3>
-    <div class="visualisations">
-      <img class="pie" src="pie1.png">
-      <img class="pie" src="pie2.png">
-      <img class="pie" src="pie3.png">
-      <img class="pie" src="pie4.png">
-      <img class="pie" src="pie5.png">
-      </div>
-    </div>
-  </div>
-
-  <div id="batch-composition" class="section">
-    <h3>Cumulative Capture Content (Post-Annotation):</h3>
-    <div class="visualisations">
-      <img class="pie" src="pie1.png">
-      <img class="pie" src="pie2.png">
-      <img class="pie" src="pie3.png">
-      <img class="pie" src="pie4.png">
-      <img class="pie" src="pie5.png">
-      </div>
-    </div>
-  </div>
+</div>
 
 
   </div>
